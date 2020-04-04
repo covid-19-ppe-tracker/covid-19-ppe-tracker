@@ -9,11 +9,17 @@
     "seed": "npx sequelize-cli db:seed:all"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
+    "admin-bro": "^2.2.3",
+    "admin-bro-expressjs": "^2.0.1",
+    "admin-bro-sequelizejs": "^0.4.0",
+    "bcrypt": "^4.0.1",
+    "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "~4.16.1",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.0",
     "morgan": "~1.9.1",
     "pg": "^8.0.0",
     "pg-hstore": "^2.3.3",
