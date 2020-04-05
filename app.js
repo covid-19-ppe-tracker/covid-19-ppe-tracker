@@ -8,14 +8,14 @@ var indexRouter = require('./routes/index');
 const AdminBro = require('admin-bro')
 const AdminBroSequelize = require('admin-bro-sequelizejs')
 const AdminBroExpress = require('admin-bro-expressjs')
-const bcrypt = require('bcrypt')
+const argon2 = require('argon2');
 AdminBro.registerAdapter(AdminBroSequelize)
 const models = require('./models')
 let adminBro = new AdminBro({
     databases: [models],
     rootPath: '/admin',
     branding: {
-        companyName: 'PPE Help'
+        companyName: 'COVID-19 PPE Tracker'
     },
     resources: [{
         resource: models.User,
@@ -36,7 +36,7 @@ let adminBro = new AdminBro({
                         if (request.payload.password) {
                             request.payload.record = {
                                 ...request.payload,
-                                password: await bcrypt.hash(request.payload.password, 10),
+                                password: await argon2.hash(request.payload.password),
                             }
                         }
                         return request
