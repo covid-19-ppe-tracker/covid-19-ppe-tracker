@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session')
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var fs = require('fs');
@@ -31,13 +32,8 @@ let adminBro = new AdminBro({
             actions: {
                 new: {
                     before: async (request) => {
-                        console.log(request.payload);
-                        
                         if (request.payload.password) {
-                            request.payload.record = {
-                                ...request.payload,
-                                password: await argon2.hash(request.payload.password),
-                            }
+                            request.payload.password = await argon2.hash(request.payload.password)
                         }
                         return request
                     },
@@ -47,7 +43,25 @@ let adminBro = new AdminBro({
     }],
 })
 
-const router = AdminBroExpress.buildRouter(adminBro)
+const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
+    authenticate: async (email, password) => {
+        const user = await models.User.findOne({ 
+            where: {
+                email
+            }
+         })
+        if (user) {
+            const matched = await argon2.verify(user.dataValues.password, password)
+            if (matched) {
+                return user
+            }
+        }
+        return false
+    },
+    cookiePassword: 'some-secret-password-used-to-secure-cookie',
+})
+
+// const router = AdminBroExpress.buildRouter(adminBro)
 
 const vapidKeys = {
     publicKey: fs.readFileSync("./server.pub").toString(),
@@ -60,14 +74,26 @@ webpush.setVapidDetails(
     vapidKeys.privateKey
 );
 var app = express();
+let sess = {
+    secret: 'adasdjlkgjofjslcsadjlvsv',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}
+}
 
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) 
+    sess.cookie.secure = true
+}
+
+app.use(session(sess))
+app.use(adminBro.options.rootPath, router)
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(adminBro.options.rootPath, router)
 app.use('/', indexRouter);
 
 module.exports = app;
