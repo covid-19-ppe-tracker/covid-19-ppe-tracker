@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     contact: DataTypes.STRING,
     latitude: DataTypes.DOUBLE,
     longitude: DataTypes.DOUBLE,
-    remarks: DataTypes.TEXT
+    remarks: DataTypes.TEXT,
+    resolved: DataTypes.BOOLEAN,
+    connected: DataTypes.BOOLEAN,
   }, {});
   Manufacturing.associate = function (models) {
     // associations can be defined here
