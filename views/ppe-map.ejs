@@ -49,24 +49,25 @@
         L.control.zoom({
                 position: 'bottomleft'
             }).addTo(mymap);
-
+        let iconOptions={
+            iconSize: [28, 70], // size of the icon
+            iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+        }
         var greenIcon = L.icon({
             iconUrl: '/images/green-marker.svg',
-
-            iconSize: [38, 95], // size of the icon
-            iconAnchor: [19, 47], // point of the icon which will correspond to marker's location
+            ...iconOptions
         });
         var redIcon = L.icon({
             iconUrl: '/images/red-marker.svg',
-
-            iconSize: [38, 95], // size of the icon
-            iconAnchor: [19, 47], // point of the icon which will correspond to marker's location
+            ...iconOptions
         });
         var blueIcon = L.icon({
             iconUrl: '/images/blue-marker.svg',
-
-            iconSize: [38, 95], // size of the icon
-            iconAnchor: [19, 47], // point of the icon which will correspond to marker's location
+            ...iconOptions
+        });
+        var purpleIcon = L.icon({
+            iconUrl: '/images/purple-marker.svg',
+            ...iconOptions
         });
         const availability_url = "/availability";
         const manufacturing_url = "/manufacturing";
@@ -77,7 +78,14 @@
             $.get(availability_url, function (data) {
                 // console.log(data)
                 for (let i of data) {
-                    const marker = L.marker([i.latitude, i.longitude], { icon: greenIcon }).addTo(mymap);
+                    let icon = greenIcon;
+                    if(i.resolved){
+                        continue;
+                    }
+                    if(i.connected){
+                        icon = purpleIcon;
+                    }
+                    const marker = L.marker([i.latitude, i.longitude], { icon: icon }).addTo(mymap);
                     marker.bindPopup(`
                     <b>Available</b><br>
                     ${i.quantity} ${i.PPEType.name}s<br>
@@ -88,7 +96,14 @@
             $.get(manufacturing_url, function (data) {
                 // console.log(data)
                 for (let i of data) {
-                    const marker = L.marker([i.latitude, i.longitude], { icon: blueIcon }).addTo(mymap);
+                    let icon = blueIcon;
+                    if(i.resolved){
+                        continue;
+                    }
+                    if(i.connected){
+                        icon = purpleIcon;
+                    }
+                    const marker = L.marker([i.latitude, i.longitude], { icon: icon }).addTo(mymap);
                     marker.bindPopup(`
                     <b>Manufacturing</b><br>
                     ${i.quantity} ${i.PPEType.name}s<br>
@@ -100,7 +115,14 @@
             $.get(requirement_url, function (data) {
                 // console.log(data)
                 for (let i of data) {
-                    const marker = L.marker([i.latitude, i.longitude], { icon: redIcon }).addTo(mymap);
+                    let icon = redIcon;
+                    if(i.resolved){
+                        continue;
+                    }
+                    if(i.connected){
+                        icon = purpleIcon;
+                    }
+                    const marker = L.marker([i.latitude, i.longitude], { icon: icon }).addTo(mymap);
                     marker.bindPopup(`
                     <b>Required</b><br>
                     ${i.quantity} ${i.PPEType.name}s<br>

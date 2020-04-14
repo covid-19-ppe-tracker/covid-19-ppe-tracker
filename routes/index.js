@@ -68,7 +68,7 @@ router.post('/suggestion', function (req, res, next) {
 })
 // Get list of availabilities
 router.get('/availability', function (req, res, next) {
-  models.Availability.findAll({ attributes: ['name', 'quantity', 'latitude', 'longitude'], include: models.PPEType }).then(function (items) {
+  models.Availability.findAll({ attributes: ['name', 'quantity', 'latitude', 'longitude', 'connected', 'resolved'], include: models.PPEType }).then(function (items) {
     res.send(items);
   }).catch(function (err) {
     console.log('Oops! something went wrong, : ', err);
@@ -76,7 +76,7 @@ router.get('/availability', function (req, res, next) {
 });
 // Get list of requirements
 router.get('/requirement', function (req, res, next) {
-  models.Requirement.findAll({ attributes: ['name', 'quantity', 'latitude', 'longitude'], include: models.PPEType }).then(function (items) {
+  models.Requirement.findAll({ attributes: ['name', 'quantity', 'latitude', 'longitude', 'connected', 'resolved'], include: models.PPEType }).then(function (items) {
     res.send(items);
   }).catch(function (err) {
     console.log('Oops! something went wrong, : ', err);
@@ -84,7 +84,7 @@ router.get('/requirement', function (req, res, next) {
 });
 // Get list of manufacturings
 router.get('/manufacturing', function (req, res, next) {
-  models.Manufacturing.findAll({ attributes: ['name', 'quantity', 'latitude', 'longitude'], include: models.PPEType }).then(function (items) {
+  models.Manufacturing.findAll({ attributes: ['name', 'quantity', 'latitude', 'longitude', 'connected', 'resolved'], include: models.PPEType }).then(function (items) {
     res.send(items);
   }).catch(function (err) {
     console.log('Oops! something went wrong, : ', err);
