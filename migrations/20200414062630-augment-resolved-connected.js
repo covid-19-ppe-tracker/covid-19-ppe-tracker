@@ -6,16 +6,14 @@ module.exports = {
       'Availabilities',
       'resolved',
       {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
+        type: Sequelize.BOOLEAN
       }
     );
     await queryInterface.addColumn(
       'Availabilities',
       'connected',
       {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
+        type: Sequelize.BOOLEAN
       }
     );
 
@@ -23,16 +21,14 @@ module.exports = {
       'Requirements',
       'resolved',
       {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
+        type: Sequelize.BOOLEAN
       }
     );
     await queryInterface.addColumn(
       'Requirements',
       'connected',
       {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
+        type: Sequelize.BOOLEAN
       }
     );
 
@@ -40,16 +36,14 @@ module.exports = {
       'Manufacturings',
       'resolved',
       {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
+        type: Sequelize.BOOLEAN
       }
     );
     return queryInterface.addColumn(
       'Manufacturings',
       'connected',
       {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
+        type: Sequelize.BOOLEAN
       }
     );
   },
